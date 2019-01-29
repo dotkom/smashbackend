@@ -57,5 +57,37 @@ router.get('/current', function(req, res){
   res.send(req.user);
 })
 
+router.get('/changepassword', function(req,res){
+  const { user, oldpassword, newpassword } = req.body;
+  if (!oldpassword || !newpassword) {
+    return res.status(400).send('Please enter all fields')
+  }
+
+  if(newpassword.length < 6) {
+    return res.status(400).send('Password must be 6 characters or more')
+  }
+
+
+
+  if (!user.validatePassword(oldpassword)) {
+    return res.status(400).send('Invalid original password')
+  }
+
+  user.setPassword(newpassword, function() {
+    if (err || !user) {
+        return res.status(400).send('Something went wrong 1')
+    }
+
+    user.save(function(err) {
+        if (err) {
+          return res.status(400).send('Something went wrong 2')
+        };
+        return res.status(200).send('Password changed. You might have to log in again?');
+    });
+});
+
+
+})
+
 
 module.exports = router;
