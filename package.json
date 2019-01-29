@@ -1,0 +1,27 @@
+{
+  "name": "rankingsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haattis/rankingsystem.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haattis/rankingsystem/issues"
+  },
+  "homepage": "https://github.com/haattis/rankingsystem#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.4.7",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  }
+}
