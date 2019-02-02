@@ -53,12 +53,19 @@ router.get('/logout', function(req,res) {
 )
 
 router.get('/current', function(req, res){
-  req.user = {name: req.user['name'], email: req.user['email']}
-  res.send(req.user);
+  if (req.user) {
+    req.user = {name: req.user['name'], email: req.user['email']}
+    return res.json(req.user);
+  }
+  return res.json(null)
 })
 
-router.get('/changepassword', function(req,res){
-  const { user, oldpassword, newpassword } = req.body;
+router.post('/changepassword', function(req,res){
+  const { oldpassword, newpassword } = req.body;
+  user = req.user
+  if (!user) {
+    return res.status(400).send('You must be logged in')
+  }
   if (!oldpassword || !newpassword) {
     return res.status(400).send('Please enter all fields')
   }
@@ -72,19 +79,16 @@ router.get('/changepassword', function(req,res){
   if (!user.validatePassword(oldpassword)) {
     return res.status(400).send('Invalid original password')
   }
+  console.log("kommer hit")
+  user.setPassword(newpassword)
 
-  user.setPassword(newpassword, function() {
-    if (err || !user) {
-        return res.status(400).send('Something went wrong 1')
-    }
-
-    user.save(function(err) {
-        if (err) {
-          return res.status(400).send('Something went wrong 2')
-        };
-        return res.status(200).send('Password changed. You might have to log in again?');
-    });
-});
+  user.save(function(err) {
+      if (err) {
+        return res.status(400).send('Something went wrong 2')
+      };
+      req.logout()
+      return res.status(200).send('Password changed. Relog');
+  });
 
 
 })

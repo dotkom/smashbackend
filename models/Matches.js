@@ -11,8 +11,8 @@ const MatchesSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Character'
   },
-  oldrank1: Integer,
-  newrank1: Integer,
+  oldrank1: Number,
+  newrank1: Number,
   player2: {
     type: Schema.Types.ObjectId,
     ref: 'User'
@@ -21,8 +21,8 @@ const MatchesSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Character'
   },
-  oldrank2: Integer,
-  newrank2: Integer,
+  oldrank2: Number,
+  newrank2: Number,
   winner: Number,
 
 
