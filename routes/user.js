@@ -60,6 +60,58 @@ router.get('/current', function(req, res){
   return res.json(null)
 })
 
+router.post('/forgot', function(req,res) {
+
+})
+
+router.get('/reset/:token', function(req, res) {
+
+    User.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: {
+            $gt: Date.now()
+        }
+    })
+    .then(user => {
+      if (!user) {
+        return res.status(400).send('Password reset token is invalid or has expired.');
+      }
+        return res.status(200).send('You are eligible to change password')
+    })
+    .catch(err => {
+      return res.status(400).send('Something went wrong, try again')
+    })
+});
+
+router.post('/reset/:token', function(req, res) {
+  User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: {
+      $gt: Date.now()
+    }
+  })
+  .then(user => {
+    if (!user) {
+      return res.status(400).send('Password reset token is invalid or has expired.')
+    }
+    user.setPassword(req.body.password)
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpires = undefined
+
+    user.save()
+    .then(user => {
+      res.status(200).send('Password changed. You can now log in')
+    })
+    .catch(err => {
+      res.status(400).send('Something went wrong')
+    })
+  })
+});
+
+
+
+
+
 router.post('/changepassword', function(req,res){
   const { oldpassword, newpassword } = req.body;
   user = req.user
