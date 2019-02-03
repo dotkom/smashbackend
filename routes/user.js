@@ -100,10 +100,10 @@ router.post('/reset/:token', function(req, res) {
 
     user.save()
     .then(user => {
-      res.status(200).send('Password changed. You can now log in')
+      return res.status(200).send('Password changed. You can now log in')
     })
     .catch(err => {
-      res.status(400).send('Something went wrong')
+      return res.status(400).send('Something went wrong')
     })
   })
 });
