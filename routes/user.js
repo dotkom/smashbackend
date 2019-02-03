@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const mongoose = require('mongoose');
+const crypto = require('crypto')
 
 const User = mongoose.model('User');
 
@@ -61,6 +62,30 @@ router.get('/current', function(req, res){
 })
 
 router.post('/forgot', function(req,res) {
+  var token = crypto.randomBytes(20).toString('hex')
+  const { email } = req.body
+  User.findOne({
+    email: email
+  })
+  .then(user => {
+    if (!user) {
+      return res.status(400).send('Email does not exist')
+    }
+    user.resetPasswordToken = token
+    user.resetPasswordExpires = Date.now() + 600000
+
+    user.save()
+    .then(user => {
+      res.status(200).send('Token has been set')
+    })
+    .catch(err => {
+      return res.status(400).send('Something went wrong')
+    })
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
+  })
+
 
 })
 
