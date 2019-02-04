@@ -3,6 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 const mongoose = require('mongoose');
 const crypto = require('crypto')
+const nodemailer = require('nodemailer')
+const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = mongoose.model('User');
 
@@ -75,15 +77,38 @@ router.post('/forgot', function(req,res) {
     user.resetPasswordExpires = Date.now() + 600000
 
     user.save()
-    .then(user => {
-      res.status(200).send('Token has been set')
-    })
     .catch(err => {
       return res.status(400).send('Something went wrong')
     })
+
+    var mailauth = {
+      auth: {
+        api_user: process.env.EMAIL_USER,
+        api_key: process.env.EMAIL_PASSWORD
+      }
+    };
+
+    var client = nodemailer.createTransport(sgTransport(mailauth))
+
+    var email = {
+       to: user.email,
+       from: 'exburn0@gmail.com',
+       subject: 'Online Smash password reset',
+       text: 'Du har bedt om tilbakestille passordet.\n\n' +
+         'Trykk på følgende link for å lage et nytt passord:\n\n' +
+         'http://' + req.headers.host + '/user/reset/' + token + '\n\n' +
+         'Passordet forblir uendret om du ikke gjør noe.\n'
+    };
+    client.sendMail(email, function(err) {
+      if (err) {
+        console.log(err)
+        return res.status(400).send('Email was not sent')
+      }
+      return res.status(200).send('An e-mail has been sent to ' + user.email + 'with further instructions. Check spam.')
+    });
   })
   .catch(err => {
-    return res.status(400).send('Something went wrong')
+    return res.status(400).send('Something went wrong2')
   })
 
 
