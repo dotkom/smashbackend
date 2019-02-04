@@ -21,7 +21,7 @@ router.post('/register', (req, res) => {
 
   const expression = [a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?
 
-  if (!email.match(expression) {
+  if (!email.match(expression)) {
     return res.status(400).send('Email is not valid')
   }
 
