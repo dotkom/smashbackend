@@ -8,7 +8,7 @@ const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = mongoose.model('User');
 
-router.post('/register', (req, res) => { // denne har ingenting med passport å gjøre
+router.post('/register', (req, res) => {
   const { name, nick, email, password } = req.body;
 
   if (!name || !email || !password || !nick) {
@@ -19,7 +19,9 @@ router.post('/register', (req, res) => { // denne har ingenting med passport å 
     return res.status(400).send('Password must be at least 6 characters')
   }
 
-  if (!email.match([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)) {
+  const expression = [a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?
+
+  if (!email.match(expression) {
     return res.status(400).send('Email is not valid')
   }
 
