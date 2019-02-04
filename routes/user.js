@@ -9,36 +9,47 @@ const sgTransport = require('nodemailer-sendgrid-transport');
 const User = mongoose.model('User');
 
 router.post('/register', (req, res) => { // denne har ingenting med passport å gjøre
-  const { name, email, password } = req.body;
+  const { name, nick, email, password } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !nick) {
     return res.status(400).send('Please enter all fields')
   }
 
   if (password.length < 6) {
     return res.status(400).send('Password must be at least 6 characters')
-  } else {
-    User.findOne({ email: email })
-    .then(user => {
-
-      if (user) {
-        return res.status(400).send('Email already exists')
-      }
-
-      else {
-        const newUser = new User({
-          name,
-          email
-        });
-        newUser.setPassword(password)
-        newUser
-        .save()
-        .then(user =>
-          res.status(200).send('User registered'))
-        .catch(err => console.log(err));
-      }
-    });
   }
+
+  if (!email.match([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)) {
+    return res.status(400).send('Email is not valid')
+  }
+
+  User.findOne({nick: nick})
+  .then(user => {
+    if (user) {
+      return res.status(400).send('Nickname already exists. Contact admin for help')
+    }
+  })
+
+  User.findOne({ email: email })
+  .then(user => {
+
+    if (user) {
+      return res.status(400).send('Email already exists')
+    }
+
+    else {
+      const newUser = new User({
+        name,
+        email
+      });
+      newUser.setPassword(password)
+      newUser
+      .save()
+      .then(user =>
+        res.status(200).send('User registered'))
+      .catch(err => console.log(err));
+    }
+  });
 });
 
 router.post('/login',
@@ -134,6 +145,12 @@ router.get('/reset/:token', function(req, res) {
 });
 
 router.post('/reset/:token', function(req, res) {
+  const { password } = req.body
+
+  if (password.length < 6) {
+    return res.status(400).send('Password must be at least 6 characters')
+  }
+
   User.findOne({
     resetPasswordToken: req.params.token,
     resetPasswordExpires: {
@@ -158,10 +175,6 @@ router.post('/reset/:token', function(req, res) {
   })
 });
 
-
-
-
-
 router.post('/changepassword', function(req,res){
   const { oldpassword, newpassword } = req.body;
   user = req.user
@@ -181,7 +194,6 @@ router.post('/changepassword', function(req,res){
   if (!user.validatePassword(oldpassword)) {
     return res.status(400).send('Invalid original password')
   }
-  console.log("kommer hit")
   user.setPassword(newpassword)
 
   user.save(function(err) {
