@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const session = require('express-session');
 const passport = require('passport')
+const auth = require('./config/auth')
 
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost/rankingsystemdb', {useNewUrlParser: true})
@@ -22,6 +23,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/user/', require("./routes/user.js"))
+app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
 
 app.listen(port)
 

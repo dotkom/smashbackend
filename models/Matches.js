@@ -7,23 +7,20 @@ const MatchesSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  character1: {
-    type: Schema.Types.ObjectId,
-    ref: 'Character'
-  },
+  character1: Number,
   oldrank1: Number,
   newrank1: Number,
   player2: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  character2: {
-    type: Schema.Types.ObjectId,
-    ref: 'Character'
-  },
+  character2: Number,
   oldrank2: Number,
   newrank2: Number,
-  winner: Number,
+  winner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
 
 
 });

@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const CharactersSchema = new Schema({
   name: String,
+  id: Number
 
 
 });
