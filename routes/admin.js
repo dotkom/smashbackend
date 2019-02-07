@@ -41,6 +41,27 @@ router.post('/user/activate', function(req, res) {
   })
 })
 
+router.get('/users', function(req, res) {
+  User.find({})
+  .select('_id name email isAdmin')
+  .then(users => {
+    return res.json(users)
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
+  })
+})
+
+router.get('/tempusers', function(req, res) {
+  User.find({})
+  .select('_id name email isAdmin')
+  .then(users => {
+    return res.json(users)
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
+  })
+})
 
 
 
