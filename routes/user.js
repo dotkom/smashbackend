@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer')
 const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = mongoose.model('User');
+const PreUser = mongoose.model('PreUser')
 
 router.post('/register', (req, res) => {
   const { name, nick, email, password } = req.body;
@@ -31,24 +32,37 @@ router.post('/register', (req, res) => {
       return res.status(400).send('Nickname already exists. Contact admin for help')
     }
   })
+  PreUser.findOne({nick: nick})
+  .then(user => {
+    if (user) {
+      return res.status(400).send('Nickname already exists. Contact admin for help')
+    }
+  })
+  PreUser.findOne({email: email})
+  .then(user => {
+    if (user) {
+      return res.status(400).send('User is waiting for admin approval. Contact him')
+    }
+  })
 
   User.findOne({ email: email })
   .then(user => {
-
+    console.log(user)
     if (user) {
       return res.status(400).send('Email already exists')
     }
 
     else {
-      const newUser = new User({
+      const newUser = new PreUser({
         name,
-        email
+        email,
+        nick
       });
       newUser.setPassword(password)
       newUser
       .save()
       .then(user =>
-        res.status(200).send('User registered'))
+        res.status(200).send('User registered. Contact admin for approval'))
       .catch(err => console.log(err));
     }
   });
