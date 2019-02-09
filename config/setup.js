@@ -4,5 +4,5 @@ const Character = mongoose.model('Character');
 
 exports.fillDatabase = () => {
   characters.forEach(function(element) {
-    Character.updateOne({id: element.id}, element, {upsert:true})})
+    Character.updateOne({name: element.name}, element, {upsert:true})})
 }

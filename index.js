@@ -30,6 +30,6 @@ app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
 
 app.listen(port)
 
-// setup.fillDatabase()
+// setup.fillDatabase() // used to fill character database upon changes
 
 console.log('Started on port: ' + port)
