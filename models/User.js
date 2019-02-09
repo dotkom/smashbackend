@@ -6,14 +6,21 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   name: String,
   nick: String,
-  rating: Number,
+  rating:  {
+    type: Number,
+    default: 1200
+  },
   email: String,
   hash: String,
   salt: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   isAdmin: Boolean,
-  activated: Boolean
+  activated: Boolean,
+  kValue: {
+    type: Number,
+    default: 100
+  },
 });
 
 UserSchema.methods.setPassword = function(password) {
