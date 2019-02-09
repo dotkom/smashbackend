@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const MatchesSchema = new Schema({
+const MatchSchema = new Schema({
   player1: {
     type: Schema.Types.ObjectId,
     ref: 'User'
@@ -25,4 +25,4 @@ const MatchesSchema = new Schema({
 
 });
 
-mongoose.model('Matches', MatchesSchema);
+mongoose.model('Match', MatchSchema);

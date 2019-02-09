@@ -10,8 +10,6 @@ const PreUserSchema = new Schema({
   email: String,
   hash: String,
   salt: String,
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
 });
 
 PreUserSchema.methods.setPassword = function(password) {

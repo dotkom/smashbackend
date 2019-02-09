@@ -13,8 +13,8 @@ mongoose.connect('mongodb://localhost/rankingsystemdb', {useNewUrlParser: true})
 
 require('./models/User');
 require('./models/PreUser');
-require('./models/Characters');
-require('./models/Matches');
+require('./models/Character');
+require('./models/Match');
 require('./config/passport');
 
 app.use(bodyParser.urlencoded({ extended: true }))
