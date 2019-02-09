@@ -17,6 +17,8 @@ require('./models/Character');
 require('./models/Match');
 require('./config/passport');
 
+const setup = require('./config/setup')
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(session({ secret: 'temp-secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
@@ -27,5 +29,7 @@ app.use('/user/', require("./routes/user.js"))
 app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
 
 app.listen(port)
+
+// setup.fillDatabase()
 
 console.log('Started on port: ' + port)
