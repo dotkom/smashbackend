@@ -7,7 +7,27 @@ const User = mongoose.model('User');
 const Character = mongoose.model('Character')
 const Match = mongoose.model('Match')
 
-router.post('/', async (req, res) => {
+router.get('/all', (req, res) => {
+  Match.find({})
+  .then(matches => {
+    return res.json(matches)
+  })
+  .catch(err => {
+    return res.status(400).send('Woops, something went wrong')
+  })
+
+})
+
+router.get('/user/:userid', (req, res) => {
+  const { userid } = req.params
+  const userobj = new ObjectId(userid)
+  Match.find({$or:[{player1: userobj}, {player2: userobj}]})
+  .then(matches => {
+    return res.json(matches)
+  })
+})
+
+router.post('/new', async (req, res) => {
   const { character1id, player2id, character2id, winnerid } = req.body;
   const player1 = req.user
   winner = new ObjectId(winnerid)
