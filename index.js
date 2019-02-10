@@ -28,6 +28,7 @@ app.use(passport.session())
 app.use('/user/', require("./routes/user.js"))
 app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
 app.use('/match/', require("./routes/match.js"))
+app.use('/character/', require("./routes/character.js"))
 
 app.listen(port)
 

@@ -10,7 +10,7 @@ const Match = mongoose.model('Match')
 router.get('/all', (req, res) => {
   Match.find({})
   .then(matches => {
-    return res.json(matches)
+    return res.send(matches)
   })
   .catch(err => {
     return res.status(400).send('Woops, something went wrong')
