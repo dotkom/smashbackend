@@ -18,10 +18,28 @@ router.get('/all', (req, res) => {
 
 })
 
-router.get('/user/:userid', (req, res) => {
-  const { userid } = req.params
+router.get('/page/:page', (req, res) => {
+  const { page } = req.params
+  const perpage = 10
+  Match.find({})
+  .skip(page-1)
+  .limit(perpage)
+  .then(matches => {
+    return res.json(matches)
+  })
+  .catch(err => {
+    return res.status(400).send('Woops, something went wrong')
+  })
+
+})
+
+router.get('/user/:userid/page/:page', (req, res) => {
+  const { userid, page } = req.params
+  const perpage = 10
   const userobj = new ObjectId(userid)
   Match.find({$or:[{player1: userobj}, {player2: userobj}]})
+  .skip(page-1)
+  .limit(perpage)
   .then(matches => {
     return res.json(matches)
   })
