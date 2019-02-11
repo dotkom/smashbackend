@@ -29,6 +29,7 @@ app.use('/user/', require("./routes/user.js"))
 app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
 app.use('/match/', require("./routes/match.js"))
 app.use('/character/', require("./routes/character.js"))
+app.use('/leaderboard/', require("./routes/leaderboard.js"))
 
 app.listen(port)
 

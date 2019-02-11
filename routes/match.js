@@ -22,7 +22,7 @@ router.get('/page/:page', (req, res) => {
   const { page } = req.params
   const perpage = 10
   Match.find({})
-  .skip(page-1)
+  .skip((page-1)*perpage)
   .limit(perpage)
   .then(matches => {
     return res.json(matches)
