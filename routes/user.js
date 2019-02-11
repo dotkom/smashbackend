@@ -8,6 +8,8 @@ const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = mongoose.model('User');
 const PreUser = mongoose.model('PreUser')
+const Match = mongoose.model('Match')
+const ObjectId = require('mongoose').Types.ObjectId;
 
 router.post('/register', (req, res) => {
   const { name, nick, email, password } = req.body;
@@ -221,6 +223,32 @@ router.post('/changepassword', function(req,res){
   });
 
 
+})
+
+router.get('/id/:id', (req, res) => {
+  const { id } = req.params
+
+  const objectid = new ObjectId(id)
+
+  User.findOne({_id: objectid})
+  .then(async user => {
+    if (!user) {
+      return res.status(400).send('Invalid ID')
+    }
+    const matchcount = await Match
+      .find({$or:[{player1: objectid}, {player2: objectid}]})
+      .countDocuments()
+    const wincount = await Match
+      .find({winner: objectid})
+      .countDocuments()
+
+    return res.send({matches: matchcount, wins: wincount, nick: user.nick, rating: user.rating})
+
+
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
+  })
 })
 
 
