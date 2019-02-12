@@ -19,14 +19,22 @@ router.get('/all', (req, res) => {
 
 router.get('/top/:page', (req, res) => {
   const { page } = req.params
+
+  if (!parseInt(page) || parseInt(page) < 1) {
+    return res.status(400).send('page must be a positive integer')
+  }
   const perpage = 10
   User.find({})
   .select('nick rating')
   .sort('-rating')
   .skip((page-1)*perpage)
-  limit(perpage)
+  .limit(perpage)
   .then(users => {
+    return res.json(users)
 
+  })
+  .catch(err => {
+    return res.status(400).send('Could not fetch leaderboard')
   })
 })
 

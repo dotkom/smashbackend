@@ -11,7 +11,7 @@ router.get('/all', (req, res) => {
     return res.json(characters)
   })
   .catch(err => {
-    return res.status(400).send('Woops, something went wrong')
+    return res.status(400).send('Could not fetch characters')
   })
 
 })
