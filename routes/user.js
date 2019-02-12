@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
   PreUser.findOne({email: email})
   .then(user => {
     if (user) {
-      return res.status(400).send('User is waiting for admin approval. Contact him')
+      return res.status(400).send('User is waiting for admin approval. Contact admin')
     }
   })
 

@@ -6,6 +6,7 @@ const Character = mongoose.model('Character')
 
 router.get('/all', (req, res) => {
   Character.find({})
+  .select("name id -_id")
   .then(characters => {
     return res.json(characters)
   })
