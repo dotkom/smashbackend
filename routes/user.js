@@ -247,7 +247,7 @@ router.get('/id/:id', (req, res) => {
 
   })
   .catch(err => {
-    return res.status(400).send('Something went wrong')
+    return res.status(400).send('Could not fetch user information')
   })
 })
 
