@@ -13,7 +13,7 @@ router.get('/all', (req, res) => {
     return res.send(matches)
   })
   .catch(err => {
-    return res.status(400).send('Woops, something went wrong')
+    return res.status(400).send('Could not fetch matches')
   })
 
 })
@@ -21,6 +21,9 @@ router.get('/all', (req, res) => {
 router.get('/page/:page', (req, res) => {
   const { page } = req.params
   const perpage = 10
+  if (!parseInt(page) || parseInt(page) < 1) {
+    return res.status(400).send('Page must be a positive integer')
+  }
   Match.find({})
   .skip((page-1)*perpage)
   .limit(perpage)
@@ -28,7 +31,7 @@ router.get('/page/:page', (req, res) => {
     return res.json(matches)
   })
   .catch(err => {
-    return res.status(400).send('Woops, something went wrong')
+    return res.status(400).send('Could not fetch matches')
   })
 
 })
@@ -36,12 +39,23 @@ router.get('/page/:page', (req, res) => {
 router.get('/user/:userid/page/:page', (req, res) => {
   const { userid, page } = req.params
   const perpage = 10
+
+  if (!parseInt(page) || parseInt(page) < 1) {
+    return res.status(400).send('Page must be a positive integer')
+  }
+
   const userobj = new ObjectId(userid)
   Match.find({$or:[{player1: userobj}, {player2: userobj}]})
   .skip(page-1)
   .limit(perpage)
   .then(matches => {
+    if (!matches) {
+      return res.status(400).send('No matches found. Invalid userid?')
+    }
     return res.json(matches)
+  })
+  .catch(err => {
+    return res.status(400).send('Could not fetch matches')
   })
 })
 
@@ -62,14 +76,14 @@ router.post('/new', async (req, res) => {
   }
 
   const char1 = await Character.findOne({
-    _id: new ObjectId(character1id)
+    id: character1id
   })
   if (!char1) {
     return res.status(400).send('Character1 does not exist')
   }
 
   const char2 = await Character.findOne({
-    _id: new ObjectId(character2id)
+    id: character2id
   })
   if (!char2) {
     return res.status(400).send('Character2 does not exist')
