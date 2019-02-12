@@ -60,13 +60,21 @@ router.get('/user/:userid/page/:page', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-  const { character1id, player2id, character2id, winnerid } = req.body;
-  const player1 = req.user
+  const { player1id, character1id, player2id, character2id, winnerid } = req.body;
+  const registeredby = req.user
   winner = new ObjectId(winnerid)
 
-  if (!player1) {
+  if (!registeredby) {
     return res.status(400).send('You must be logged in to post a match')
   }
+
+  if (player1id == player2id) {
+    return res.status(400).send('Player ids cant be identical')
+  }
+
+  const player1 = await User.findOne({
+    _id: new ObjectId(player1id)
+  })
 
   const player2 = await User.findOne({
     _id: new ObjectId(player2id)
@@ -90,7 +98,7 @@ router.post('/new', async (req, res) => {
   }
 
   if( !winner.equals(player2._id) && !winner.equals(player1._id)) {
-    return res.status(400).send('Winner must be a player')
+    return res.status(400).send('Winner must be one of the players')
   }
 
   const expected1 = 1 / (1 + 10**((player2.rating - player1.rating)/400))
@@ -109,7 +117,8 @@ router.post('/new', async (req, res) => {
     character2: char2.id,
     oldrank2: player2.rating,
     newrank2: new2,
-    winner: winner
+    winner: winner,
+    registeredby: registeredby._id
   })
   newMatch.save()
   .then(function(newmatch) {

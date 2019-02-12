@@ -22,6 +22,10 @@ const MatchSchema = new Schema({
     ref: 'User'
   },
   date: { type: Date, default: Date.now },
+  registeredby: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 
 
 });
