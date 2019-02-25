@@ -74,7 +74,8 @@ router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
     req.user = {name: req.user['name'], email: req.user['email']}
-    res.send(req.user);
+    res.json(req.user);
+    //res.status(200).send(req.user)
   }
 );
 

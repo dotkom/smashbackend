@@ -1,6 +1,7 @@
 const express = require('express')
 require('dotenv').config()
 const app = express()
+var cors = require('cors')
 const port = process.env.PORT || 8080
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
@@ -18,7 +19,7 @@ require('./models/Match');
 require('./config/passport');
 
 const setup = require('./config/setup')
-
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(session({ secret: 'temp-secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
@@ -30,6 +31,8 @@ app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
 app.use('/match/', require("./routes/match.js"))
 app.use('/character/', require("./routes/character.js"))
 app.use('/leaderboard/', require("./routes/leaderboard.js"))
+
+
 
 app.listen(port)
 
