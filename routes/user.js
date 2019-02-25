@@ -74,7 +74,7 @@ router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
     req.user = {name: req.user['name'], email: req.user['email']}
-    res.json(req.user);
+    return res.json(req.user);
     //res.status(200).send(req.user)
   }
 );
@@ -86,6 +86,7 @@ router.get('/logout', function(req,res) {
 )
 
 router.get('/current', function(req, res){
+  console.log(req.user)
   if (req.user) {
     req.user = {name: req.user['name'], email: req.user['email']}
     return res.json(req.user);

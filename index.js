@@ -19,7 +19,9 @@ require('./models/Match');
 require('./config/passport');
 
 const setup = require('./config/setup')
-app.use(cors())
+if ( app.get('env') === 'development' ) {
+  app.use(cors({credentials : true, origin : ['http://localhost:3000']}))
+}
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(session({ secret: 'temp-secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
