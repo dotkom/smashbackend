@@ -49,7 +49,6 @@ router.post('/register', (req, res) => {
 
   User.findOne({ email: email })
   .then(user => {
-    console.log(user)
     if (user) {
       return res.status(400).send('Email already exists')
     }
@@ -73,7 +72,7 @@ router.post('/register', (req, res) => {
 router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
-    req.user = {name: req.user['name'], email: req.user['email']}
+    req.user = {_id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
     //res.status(200).send(req.user)
   }
@@ -86,9 +85,8 @@ router.get('/logout', function(req,res) {
 )
 
 router.get('/current', function(req, res){
-  console.log(req.user)
   if (req.user) {
-    req.user = {name: req.user['name'], email: req.user['email']}
+    req.user = {_id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
   }
   return res.json(null)
