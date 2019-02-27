@@ -48,6 +48,10 @@ router.get('/user/:userid/page/:page', (req, res) => {
   Match.find({$or:[{player1: userobj}, {player2: userobj}]})
   .skip(page-1)
   .limit(perpage)
+  .populate('player1','nick _id')
+  .populate('player2', 'nick _id')
+  .populate('character1', 'name id _id')
+  .populate('character2', 'name id _id')
   .then(matches => {
     if (!matches) {
       return res.status(400).send('No matches found. Invalid userid?')
@@ -84,14 +88,14 @@ router.post('/new', async (req, res) => {
   }
 
   const char1 = await Character.findOne({
-    id: character1id
+    _id: new ObjectId(character1id)
   })
   if (!char1) {
     return res.status(400).send('Character1 does not exist')
   }
 
   const char2 = await Character.findOne({
-    id: character2id
+    _id: new ObjectId(character2id)
   })
   if (!char2) {
     return res.status(400).send('Character2 does not exist')
@@ -110,11 +114,11 @@ router.post('/new', async (req, res) => {
 
   const newMatch = new Match({
     player1: player1._id,
-    character1: char1.id,
+    character1: char1._id,
     oldrank1: player1.rating,
     newrank1: new1,
     player2: player2._id,
-    character2: char2.id,
+    character2: char2._id,
     oldrank2: player2.rating,
     newrank2: new2,
     winner: winner,
