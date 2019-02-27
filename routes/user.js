@@ -72,7 +72,7 @@ router.post('/register', (req, res) => {
 router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
-    req.user = {_id: req.user['_id'], name: req.user['name'], email: req.user['email']}
+    req.user = {isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
     //res.status(200).send(req.user)
   }
@@ -86,7 +86,7 @@ router.get('/logout', function(req,res) {
 
 router.get('/current', function(req, res){
   if (req.user) {
-    req.user = {_id: req.user['_id'], name: req.user['name'], email: req.user['email']}
+    req.user = {isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
   }
   return res.json(null)

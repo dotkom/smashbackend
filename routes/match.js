@@ -48,8 +48,8 @@ router.get('/user/:userid/page/:page', (req, res) => {
   Match.find({$or:[{player1: userobj}, {player2: userobj}]})
   .skip(page-1)
   .limit(perpage)
-  .populate('player1','nick _id')
-  .populate('player2', 'nick _id')
+  .populate('player1','nick _id rank')
+  .populate('player2', 'nick _id rank')
   .populate('character1', 'name id _id')
   .populate('character2', 'name id _id')
   .then(matches => {
