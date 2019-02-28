@@ -98,8 +98,8 @@ router.post('/match/delete', function(req, res){
     })
 
     match.remove()
-    .then(function(){
-      return res.status(200).send('Match deleted')
+    .then((match) => {
+      return res.status(200).send(match)
     })
     .catch(function(){
       user1.rating = user1.rating + rankchange1
