@@ -72,7 +72,7 @@ router.post('/register', (req, res) => {
 router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
-    req.user = {isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
+    req.user = {nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
     //res.status(200).send(req.user)
   }
@@ -86,7 +86,7 @@ router.get('/logout', function(req,res) {
 
 router.get('/current', function(req, res){
   if (req.user) {
-    req.user = {isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
+    req.user = {nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
   }
   return res.json(null)
@@ -248,6 +248,36 @@ router.get('/id/:id', (req, res) => {
   })
   .catch(err => {
     return res.status(400).send('Could not fetch user information')
+  })
+})
+
+router.post('/changenick', (req, res) => {
+  const { nick } = req.body
+
+  if (!req.user) {
+    return res.status(400).send('User not logged in')
+  }
+
+  User.findOne({nick: nick})
+  .then(user => {
+    if(user){
+      return res.status(400).send('User have already taken that nickname')
+    }
+
+
+  })
+  let updatedUser = req.user
+  updatedUser.nick = nick
+  updatedUser.save()
+  .then(user => {
+    req.user = {nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
+    return res.json(req.user);
+  })
+  .catch(err => {
+    return res.status(400).send('Nick not updated. Something went wrong')
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
   })
 })
 
