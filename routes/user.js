@@ -12,10 +12,14 @@ const Match = mongoose.model('Match')
 const ObjectId = require('mongoose').Types.ObjectId;
 
 router.post('/register', (req, res) => {
-  const { name, nick, email, password } = req.body;
+  const { name, nick, email, password, password2 } = req.body;
 
-  if (!name || !email || !password || !nick) {
+  if (!name || !email || !password || !nick || !password2) {
     return res.status(400).send('Please enter all fields')
+  }
+
+  if (password != password2) {
+    return res.status(400).send('Passwords must be identical')
   }
 
   if (password.length < 6) {
