@@ -9,7 +9,7 @@ const PreUser = mongoose.model('PreUser');
 const Match = mongoose.model('Match')
 
 
-router.post('/user/activate', function(req, res) {
+router.post('/tempuser/activate', function(req, res) {
   const { _id } = req.body
 
   PreUser.findOne({
@@ -31,7 +31,7 @@ router.post('/user/activate', function(req, res) {
     .then(newUser => {
       user.remove()
       .then( oldUser => {
-        return res.status(200).send('Old user removed, new user saved')
+        return res.status(200).send(oldUser)
       })
       .catch(err => {
         return res.status(400).send('Old user was not removed. You should do so manually')
@@ -40,6 +40,27 @@ router.post('/user/activate', function(req, res) {
     .catch(err => {
       return res.status(400).send('User was not activated')
     })
+  })
+})
+
+router.post('/tempuser/delete', function(req, res) {
+  const { _id } = req.body
+
+  PreUser.findOne({
+    _id: new ObjectId(_id)
+  })
+  .then(user => {
+    if (!user) {
+      return res.status(400).send('Wrong userid')
+    }
+    user.remove()
+    .then( user => {
+      return res.status(200).send(user)
+    })
+
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
   })
 })
 
@@ -55,8 +76,8 @@ router.get('/users', function(req, res) {
 })
 
 router.get('/tempusers', function(req, res) {
-  User.find({})
-  .select('_id name email isAdmin')
+  PreUser.find({})
+  .select('_id name email nick')
   .then(users => {
     return res.json(users)
   })
