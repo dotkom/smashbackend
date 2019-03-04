@@ -18,6 +18,10 @@ router.post('/register', (req, res) => {
     return res.status(400).send('Please enter all fields')
   }
 
+  if(nick.length > 10  || nick.length < 1) {
+    return res.status(400).send('Nick must be between 1 and 10 characters')
+  }
+
   if (password != password2) {
     return res.status(400).send('Passwords must be identical')
   }
