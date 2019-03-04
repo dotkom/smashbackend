@@ -9,6 +9,10 @@ const Match = mongoose.model('Match')
 
 router.get('/all', (req, res) => {
   Match.find({})
+  .populate('player1','nick _id rank')
+  .populate('player2', 'nick _id rank')
+  .populate('character1', 'name id _id')
+  .populate('character2', 'name id _id')
   .then(matches => {
     return res.send(matches)
   })
@@ -27,6 +31,10 @@ router.get('/page/:page', (req, res) => {
   Match.find({})
   .skip((page-1)*perpage)
   .limit(perpage)
+  .populate('player1','nick _id rank')
+  .populate('player2', 'nick _id rank')
+  .populate('character1', 'name id _id')
+  .populate('character2', 'name id _id')
   .then(matches => {
     return res.json(matches)
   })
