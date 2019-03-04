@@ -66,7 +66,7 @@ router.post('/tempuser/delete', function(req, res) {
 
 router.get('/users', function(req, res) {
   User.find({})
-  .select('_id name email isAdmin')
+  .select('_id name email isAdmin nick')
   .then(users => {
     return res.json(users)
   })

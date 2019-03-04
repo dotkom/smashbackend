@@ -11,6 +11,17 @@ const PreUser = mongoose.model('PreUser')
 const Match = mongoose.model('Match')
 const ObjectId = require('mongoose').Types.ObjectId;
 
+router.get('/all', function(req, res) {
+  User.find({})
+  .select('_id nick ')
+  .then(users => {
+    return res.json(users)
+  })
+  .catch(err => {
+    return res.status(400).send('Something went wrong')
+  })
+})
+
 router.post('/register', (req, res) => {
   const { name, nick, email, password, password2 } = req.body;
 
