@@ -1,14 +1,15 @@
 const express = require('express')
 require('dotenv').config()
+const passport = require('passport');
 const app = express()
 var cors = require('cors')
 const port = process.env.PORT || 8080
 const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const session = require('express-session');
 require('./models/User');
 require('./models/Character');
 require('./models/Match');
+const bodyParser = require('body-parser')
+const session = require('express-session');
 const userstatus = require('./config/userstatus')
 const { setupOIDC } = require('./config/passport')
 const auth = require('./config/auth')
@@ -22,15 +23,16 @@ if ( app.get('env') === 'development' ) {
 }
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(session({ secret: 'temp-secret', resave: false, saveUninitialized: false }));
-
+app.use(session({ secret: 'temp-secret', resave: true, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+auth(app)
 app.use('/user/', require("./routes/user.js"))
 app.use('/admin/', userstatus.isAdmin, require("./routes/admin.js"))
 app.use('/match/', require("./routes/match.js"))
 app.use('/character/', require("./routes/character.js"))
 app.use('/leaderboard/', require("./routes/leaderboard.js"))
 
-auth(app)
 
 app.listen(port)
 

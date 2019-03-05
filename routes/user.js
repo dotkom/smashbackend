@@ -35,7 +35,7 @@ router.get('/logout', function(req,res) {
 router.get('/auth', passport.authenticate('oidc', { successRedirect: '/', failureRedirect: '/' }))
 */
 router.get('/current', function(req, res){
-  console.log(req.user)
+  console.log("current ",req.user)
   if (req.user) {
     req.user = {nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);

@@ -14,12 +14,10 @@ module.exports = async (app) => {
       done(err, user);
     });
   });
-  app.use(passport.initialize());
-  app.use(passport.session());
   app.get('/login', passport.authenticate('oidc'));
   app.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/');
+    return res.status(200).send('logged out')
   });
   app.get('/auth', passport.authenticate('oidc', { successRedirect: 'localhost:3000', failureRedirect: 'localhost:3000' }));
   return app;

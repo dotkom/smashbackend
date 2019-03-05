@@ -71,7 +71,7 @@ async function configureOIDCPassport(client){
     usePKCE
   }, async (tokenset, userinfo, done) => {
     const user = await createUser(parseOpenIDUserinfo(userinfo))
-    done(null, user )
+    done(null, user)
   }))
 }
 
