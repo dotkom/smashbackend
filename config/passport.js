@@ -21,17 +21,18 @@ async function createUser(user) {
   try {
     const existingUser = await User.findOne({onlinewebId: onlinewebId})
     if (!existingUser) {
+      console.log("Her SKAL kjøres")
       const newUser = new User({
         name,
         nick,
         onlinewebId,
         email
       })
-      await newUser.save()
-      .then(user => {
-        return user;
-      })
+      const user = await newUser.save()
+      console.log(user)
+      return user;
     }
+    console.log("Her skal ikke kjøres")
     const user = await User.findOne({ _id: existingUser._id });
     return Object.assign(user, {
       onlinewebId: onlinewebId,
