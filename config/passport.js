@@ -2,25 +2,17 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 //const LocalStrategy = require('passport-local');
 const User = mongoose.model('User');
-const { Strategy, Issuer } = require('openid-client')
+const { Strategy } = require('openid-client')
+const Issuer = require('openid-client').Issuer;
 
-const params = {
-  client_id: process.env.CLIENT_ID,
-  redirect_uri: process.env.REDIRECT_URI,
-  scope: process.env.SCOPE,
-  client_secret: process.env.CLIENT_SECRET,
 
-}
-const passReqToCallback = false;
-const usePKCE = false;
 
 async function getOIDCClient() {
   const provider = process.env.HOST_URL
   const clientId = process.env.CLIENT_ID
 
-  const { Client } = await Issuer.discover(provider)
-
-  return new Client({client_id: clientId})
+  const issuer = await Issuer.discover(provider)
+  return new issuer.Client({client_id: clientId, client_secret: process.env.CLIENT_SECRET})
 }
 
 async function createUser(user) {
@@ -35,12 +27,12 @@ async function createUser(user) {
         onlinewebId,
         email
       })
-      newUser.save()
+      await newUser.save()
       .then(user => {
         return user;
       })
     }
-    const user = await User.findOne({ where: { _id: existingUser._id } });
+    const user = await User.findOne({ _id: existingUser._id });
     return Object.assign(user, {
       onlinewebId: onlinewebId,
       name: name,
@@ -61,14 +53,25 @@ function parseOpenIDUserinfo(data) {
 }
 
 
-async function configureOIDCPassport(){
+async function configureOIDCPassport(client){
+  const params = {
+    client_id: process.env.CLIENT_ID,
+    redirect_uri: process.env.REDIRECT_URI,
+    scope: process.env.SCOPE,
+    client_secret: process.env.CLIENT_SECRET,
+
+  }
+  const passReqToCallback = false;
+  const usePKCE = false;
+
   passport.use('oidc', new Strategy({
     client,
     params,
     passReqToCallback,
     usePKCE
   }, async (tokenset, userinfo, done) => {
-    done(null, await createUser(parseOpenIDUserinfo(userinfo)))
+    const user = await createUser(parseOpenIDUserinfo(userinfo))
+    done(null, user )
   }))
 }
 
@@ -86,12 +89,8 @@ async function setupOIDC(){
 
 
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
+
+module.exports = {
+  setupOIDC,
+};

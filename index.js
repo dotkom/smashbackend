@@ -6,16 +6,15 @@ const port = process.env.PORT || 8080
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const session = require('express-session');
-const passport = require('passport')
+require('./models/User');
+require('./models/Character');
+require('./models/Match');
+const userstatus = require('./config/userstatus')
+const { setupOIDC } = require('./config/passport')
 const auth = require('./config/auth')
 
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost/rankingsystemdb', {useNewUrlParser: true})
-
-require('./models/User');
-require('./models/Character');
-require('./models/Match');
-require('./config/passport');
 
 const setup = require('./config/setup')
 if ( app.get('env') === 'development' ) {
@@ -23,17 +22,15 @@ if ( app.get('env') === 'development' ) {
 }
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(session({ secret: 'temp-secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(session({ secret: 'temp-secret', resave: false, saveUninitialized: false }));
 
 app.use('/user/', require("./routes/user.js"))
-app.use('/admin/', auth.isAdmin, require("./routes/admin.js"))
+app.use('/admin/', userstatus.isAdmin, require("./routes/admin.js"))
 app.use('/match/', require("./routes/match.js"))
 app.use('/character/', require("./routes/character.js"))
 app.use('/leaderboard/', require("./routes/leaderboard.js"))
 
-
+auth(app)
 
 app.listen(port)
 
