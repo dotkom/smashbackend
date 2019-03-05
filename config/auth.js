@@ -19,6 +19,6 @@ module.exports = async (app) => {
     req.logout();
     return res.status(200).send('logged out')
   });
-  app.get('/auth', passport.authenticate('oidc', { successRedirect: 'localhost:3000', failureRedirect: 'localhost:3000' }));
+  app.get('/auth', passport.authenticate('oidc', { successRedirect: 'http://localhost:3000', failureRedirect: 'http://localhost:3000' }));
   return app;
 };
