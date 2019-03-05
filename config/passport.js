@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 //const LocalStrategy = require('passport-local');
 const User = mongoose.model('User');
-const { Stategy, Issuer } = require('openid-client')
+const { Strategy, Issuer } = require('openid-client')
 
 const params = {
   client_id: process.env.CLIENT_ID,
@@ -75,32 +75,16 @@ async function configureOIDCPassport(){
 async function setupOIDC(){
   try {
     const client = await getOIDCClient();
-    await
+    await configureOIDCPassport(client)
+    return true
+  } catch (err) {
+    return false
   }
 }
 
-passport.use('oidc', new Strategy({
-
-}))
 
 
 
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-  },
-  function(email, password, done) {
-    User.findOne({ email }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect email.' });
-      }
-      if (!user.validatePassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);

@@ -5,79 +5,13 @@ const mongoose = require('mongoose');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 const User = mongoose.model('User');
-const PreUser = mongoose.model('PreUser');
 const Match = mongoose.model('Match')
 
 
-router.post('/tempuser/activate', function(req, res) {
-  const { _id } = req.body
-
-  PreUser.findOne({
-    _id: new ObjectId(_id)
-  })
-  .then(user => {
-    if (!user) {
-      return res.status(400).send('Wrong userid')
-    }
-    const activatedUser = new User({
-      name: user.name,
-      email: user.email,
-      nick: user.nick,
-      hash: user.hash,
-      salt: user.salt,
-    })
-    activatedUser
-    .save()
-    .then(newUser => {
-      user.remove()
-      .then( oldUser => {
-        return res.status(200).send(oldUser)
-      })
-      .catch(err => {
-        return res.status(400).send('Old user was not removed. You should do so manually')
-      })
-    })
-    .catch(err => {
-      return res.status(400).send('User was not activated')
-    })
-  })
-})
-
-router.post('/tempuser/delete', function(req, res) {
-  const { _id } = req.body
-
-  PreUser.findOne({
-    _id: new ObjectId(_id)
-  })
-  .then(user => {
-    if (!user) {
-      return res.status(400).send('Wrong userid')
-    }
-    user.remove()
-    .then( user => {
-      return res.status(200).send(user)
-    })
-
-  })
-  .catch(err => {
-    return res.status(400).send('Something went wrong')
-  })
-})
 
 router.get('/users', function(req, res) {
   User.find({})
   .select('_id name email isAdmin nick')
-  .then(users => {
-    return res.json(users)
-  })
-  .catch(err => {
-    return res.status(400).send('Something went wrong')
-  })
-})
-
-router.get('/tempusers', function(req, res) {
-  PreUser.find({})
-  .select('_id name email nick')
   .then(users => {
     return res.json(users)
   })

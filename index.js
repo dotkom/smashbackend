@@ -13,7 +13,6 @@ mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost/rankingsystemdb', {useNewUrlParser: true})
 
 require('./models/User');
-require('./models/PreUser');
 require('./models/Character');
 require('./models/Match');
 require('./config/passport');
