@@ -23,6 +23,44 @@ async function getOIDCClient() {
   return new Client({client_id: clientId})
 }
 
+async function createUser(user) {
+  const { name, nick, onlinewebId, email } = user
+
+  try {
+    const existingUser = await User.findOne({onlinewebId: onlinewebId})
+    if (!existingUser) {
+      const newUser = new User({
+        name,
+        nick,
+        onlinewebId,
+        email
+      })
+      newUser.save()
+      .then(user => {
+        return user;
+      })
+    }
+    const user = await User.findOne({ where: { _id: existingUser._id } });
+    return Object.assign(user, {
+      onlinewebId: onlinewebId,
+      name: name,
+      email: email,
+    }).save();
+  } catch (err) {
+    throw err
+  }
+}
+
+function parseOpenIDUserinfo(data) {
+  return {
+    name: data.name,
+    nick: data.preferred_username,
+    onlinewebId: data.preferred_username,
+    email: data.email,
+  };
+}
+
+
 async function configureOIDCPassport(){
   passport.use('oidc', new Strategy({
     client,
