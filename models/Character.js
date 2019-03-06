@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 const CharacterSchema = new Schema({
   name: String,
   id: Number,
-  image: Buffer
 
 
 });

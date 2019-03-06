@@ -36,6 +36,6 @@ app.use('/leaderboard/', require("./routes/leaderboard.js"))
 
 app.listen(port)
 
-// setup.fillDatabase() // used to fill character database upon changes
+//setup.fillDatabase() // used to fill character database upon changes
 
 console.log('Started on port: ' + port)

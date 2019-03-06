@@ -7,7 +7,7 @@ const Character = mongoose.model('Character')
 router.get('/all', (req, res) => {
   Character.find({})
   .sort('id')
-  .select("name id -_id")
+  .select("name id _id")
   .then(characters => {
     return res.json(characters)
   })

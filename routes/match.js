@@ -29,6 +29,7 @@ router.get('/page/:page', (req, res) => {
     return res.status(400).send('Page must be a positive integer')
   }
   Match.find({})
+  .sort({date: 'desc'})
   .skip((page-1)*perpage)
   .limit(perpage)
   .populate('player1','nick _id rank')
@@ -54,6 +55,7 @@ router.get('/user/:userid/page/:page', (req, res) => {
 
   const userobj = new ObjectId(userid)
   Match.find({$or:[{player1: userobj}, {player2: userobj}]})
+  .sort({date: 'desc'})
   .skip(page-1)
   .limit(perpage)
   .populate('player1','nick _id rank')
