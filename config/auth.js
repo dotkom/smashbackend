@@ -1,12 +1,24 @@
-exports.isLoggedin = (req, res, next) => {
-  if (!req.user) {
-    return res.status(400).send('User not logged in')
-  }
-  next();
-}
+const passport = require('passport');
+const { setupOIDC } = require('./passport');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
-exports.isAdmin = (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
-    return res.status(400).send('User not admin')
-  } next();
-}
+
+module.exports = async (app) => {
+  await setupOIDC();
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
+  app.get('/login', passport.authenticate('oidc'));
+  app.get('/logout', (req, res) => {
+    req.logout();
+    return res.status(200).send('logged out')
+  });
+  app.get('/auth', passport.authenticate('oidc', { successRedirect: 'http://localhost:3000', failureRedirect: 'http://localhost:3000' }));
+  return app;
+};
