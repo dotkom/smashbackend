@@ -56,7 +56,7 @@ router.get('/user/:userid/page/:page', (req, res) => {
   const userobj = new ObjectId(userid)
   Match.find({$or:[{player1: userobj}, {player2: userobj}]})
   .sort({date: 'desc'})
-  .skip(page-1)
+  .skip((page-1)*perpage)
   .limit(perpage)
   .populate('player1','nick _id rank')
   .populate('player2', 'nick _id rank')
@@ -151,7 +151,15 @@ router.post('/new', async (req, res) => {
     return newmatch
   })
   .then(function(newmatch){
-    return res.status(200).send(newmatch)
+    Match.findOne({_id: newmatch._id})
+    .populate('player1','nick _id rank')
+    .populate('player2', 'nick _id rank')
+    .populate('character1', 'name id _id')
+    .populate('character2', 'name id _id')
+    .then(match => {
+      return res.status(200).send(match)
+
+    })
   })
   .catch(err => {
     return res.status(400).send('Match not registered')
