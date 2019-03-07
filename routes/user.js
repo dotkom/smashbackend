@@ -61,7 +61,7 @@ router.get('/id/:id', (req, res) => {
     const rank = await User
       .countDocuments({rating:{$gt: user.rating}})
 
-    return res.send({_id: user._id ,rank: rank, matches: matchcount, wins: wincount, nick: user.nick, rating: user.rating})
+    return res.send({_id: user._id ,rank: rank+1, matches: matchcount, wins: wincount, nick: user.nick, rating: user.rating})
 
 
   })

@@ -23,7 +23,7 @@ if ( app.get('env') === 'development' ) {
 }
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(session({ secret: 'temp-secret', resave: true, saveUninitialized: false }));
+app.use(session({ secret: 'temp-secret', cookie: {maxAge: 1000*60*60*24*7}, resave: true, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 auth(app)
