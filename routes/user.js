@@ -12,7 +12,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 router.get('/all', function(req, res) {
   User.find({})
-  .select('_id nick ')
+  .select('_id nick rating ')
   .then(users => {
     return res.json(users)
   })
@@ -36,7 +36,7 @@ router.get('/auth', passport.authenticate('oidc', { successRedirect: '/', failur
 */
 router.get('/current', function(req, res){
   if (req.user) {
-    req.user = {nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
+    req.user = {rating: req.user['rating'],nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
     return res.json(req.user);
   }
   return res.json(null)
@@ -58,8 +58,10 @@ router.get('/id/:id', (req, res) => {
     const wincount = await Match
       .find({winner: objectid})
       .countDocuments()
+    const rank = await User
+      .countDocuments({rating:{$gt: user.rating}})
 
-    return res.send({matches: matchcount, wins: wincount, nick: user.nick, rating: user.rating})
+    return res.send({_id: user._id ,rank: rank, matches: matchcount, wins: wincount, nick: user.nick, rating: user.rating})
 
 
   })
@@ -70,6 +72,10 @@ router.get('/id/:id', (req, res) => {
 
 router.post('/changenick', (req, res) => {
   const { nick } = req.body
+
+  if (nick.length > 10 || nick.length < 1) {
+    return res.status(400).send('Nick must be between 1 and 10 chars')
+  }
 
   if (!req.user) {
     return res.status(400).send('User not logged in')
@@ -88,7 +94,7 @@ router.post('/changenick', (req, res) => {
   updatedUser.save()
   .then(user => {
     req.user = {nick: req.user['nick'], isAdmin: req.user['isAdmin'], _id: req.user['_id'], name: req.user['name'], email: req.user['email']}
-    return res.json(req.user);
+    return res.json(user);
   })
   .catch(err => {
     return res.status(400).send('Nick not updated. Something went wrong')
