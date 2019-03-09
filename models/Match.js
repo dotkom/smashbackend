@@ -5,33 +5,33 @@ const { Schema } = mongoose;
 const MatchSchema = new Schema({
   player1: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   character1: {
     type: Schema.Types.ObjectId,
-    ref: 'Character'
+    ref: 'Character',
   },
   oldrank1: Number,
   newrank1: Number,
   player2: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   character2: {
     type: Schema.Types.ObjectId,
-    ref: 'Character'
+    ref: 'Character',
   },
   oldrank2: Number,
   newrank2: Number,
   winner: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   date: { type: Date, default: Date.now },
   registeredby: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
+    ref: 'User',
+  },
 
 
 });

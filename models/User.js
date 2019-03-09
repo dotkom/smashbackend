@@ -6,16 +6,16 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   name: String,
   nick: String,
-  rating:  {
+  rating: {
     type: Number,
-    default: 1200
+    default: 1200,
   },
   onlinewebId: String,
   email: String,
   isAdmin: Boolean,
   kValue: {
     type: Number,
-    default: 100
+    default: 100,
   },
 });
 
