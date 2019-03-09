@@ -40,3 +40,6 @@ app.use('/leaderboard/', require('./routes/leaderboard.js'));
 app.listen(port);
 // const setup = require('./config/setup');
 // setup.fillDatabase() // used to fill character database upon changes
+
+/* eslint no-console: "off" */
+console.log('Listening on port', port);
