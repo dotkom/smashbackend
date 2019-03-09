@@ -10,13 +10,13 @@ router.get('/all', (req, res) => {
     .select('nick rating')
     .sort('-rating')
     .then(users => res.json(users))
-    .catch(err => res.status(400).send('Woops, something went wrong'));
+    .catch(() => res.status(400).send('Woops, something went wrong'));
 });
 
 router.get('/top/:page', (req, res) => {
   const { page } = req.params;
 
-  if (!parseInt(page) || parseInt(page) < 1) {
+  if (!parseInt(page, 10) || parseInt(page, 10) < 1) {
     return res.status(400).send('page must be a positive integer');
   }
   const perpage = 10;
@@ -26,7 +26,7 @@ router.get('/top/:page', (req, res) => {
     .skip((page - 1) * perpage)
     .limit(perpage)
     .then(users => res.json(users))
-    .catch(err => res.status(400).send('Could not fetch leaderboard'));
+    .catch(() => res.status(400).send('Could not fetch leaderboard'));
 });
 
 module.exports = router;

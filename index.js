@@ -13,13 +13,11 @@ require('./models/Match');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const userstatus = require('./config/userstatus');
-const { setupOIDC } = require('./config/passport');
 const auth = require('./config/auth');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/rankingsystemdb', { useNewUrlParser: true });
 
-const setup = require('./config/setup');
 
 if (app.get('env') === 'development') {
   app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
@@ -40,7 +38,5 @@ app.use('/leaderboard/', require('./routes/leaderboard.js'));
 
 
 app.listen(port);
-
+// const setup = require('./config/setup');
 // setup.fillDatabase() // used to fill character database upon changes
-
-console.log(`Started on port: ${port}`);

@@ -1,6 +1,6 @@
 const passport = require('passport');
-const { setupOIDC } = require('./passport');
 const mongoose = require('mongoose');
+const { setupOIDC } = require('./passport');
 
 const User = mongoose.model('User');
 

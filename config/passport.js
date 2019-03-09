@@ -14,10 +14,10 @@ async function getOIDCClient() {
   return new issuer.Client({ client_id: clientId, client_secret: process.env.CLIENT_SECRET });
 }
 
-async function createUser(user) {
+async function createUser(userinfo) {
   const {
     name, nick, onlinewebId, email,
-  } = user;
+  } = userinfo;
 
   try {
     const existingUser = await User.findOne({ onlinewebId });
@@ -31,8 +31,8 @@ async function createUser(user) {
       const user = await newUser.save();
       return user;
     }
-    const user = await User.findOne({ _id: existingUser._id });
-    return Object.assign(user, {
+    const updatedUser = await User.findOne({ _id: existingUser._id });
+    return Object.assign(updatedUser, {
       onlinewebId,
       name,
       email,

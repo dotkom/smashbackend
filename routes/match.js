@@ -16,13 +16,13 @@ router.get('/all', (req, res) => {
     .populate('character1', 'name id _id')
     .populate('character2', 'name id _id')
     .then(matches => res.send(matches))
-    .catch(err => res.status(400).send('Could not fetch matches'));
+    .catch(() => res.status(400).send('Could not fetch matches'));
 });
 
 router.get('/page/:page', (req, res) => {
   const { page } = req.params;
   const perpage = 10;
-  if (!parseInt(page) || parseInt(page) < 1) {
+  if (!parseInt(page, 10) || parseInt(page, 10) < 1) {
     return res.status(400).send('Page must be a positive integer');
   }
   Match.find({})
@@ -34,14 +34,14 @@ router.get('/page/:page', (req, res) => {
     .populate('character1', 'name id _id')
     .populate('character2', 'name id _id')
     .then(matches => res.json(matches))
-    .catch(err => res.status(400).send('Could not fetch matches'));
+    .catch(() => res.status(400).send('Could not fetch matches'));
 });
 
 router.get('/user/:userid/page/:page', (req, res) => {
   const { userid, page } = req.params;
   const perpage = 10;
 
-  if (!parseInt(page) || parseInt(page) < 1) {
+  if (!parseInt(page, 10) || parseInt(page, 10) < 1) {
     return res.status(400).send('Page must be a positive integer');
   }
 
@@ -60,7 +60,7 @@ router.get('/user/:userid/page/:page', (req, res) => {
       }
       return res.json(matches);
     })
-    .catch(err => res.status(400).send('Could not fetch matches'));
+    .catch(() => res.status(400).send('Could not fetch matches'));
 });
 
 router.post('/new', async (req, res) => {
@@ -68,13 +68,13 @@ router.post('/new', async (req, res) => {
     player1id, character1id, player2id, character2id, winnerid,
   } = req.body;
   const registeredby = req.user;
-  winner = new ObjectId(winnerid);
+  const winner = new ObjectId(winnerid);
 
   if (!registeredby) {
     return res.status(400).send('You must be logged in to post a match');
   }
 
-  if (player1id == player2id) {
+  if (player1id === player2id) {
     return res.status(400).send('Player ids cant be identical');
   }
 
@@ -107,8 +107,8 @@ router.post('/new', async (req, res) => {
     return res.status(400).send('Winner must be one of the players');
   }
 
-  const expected1 = 1 / (1 + 10 ** ((player2.rating - player1.rating) / 400));
-  const expected2 = 1 / (1 + 10 ** ((player1.rating - player2.rating) / 400));
+  const expected1 = 1 / (1 + (10 ** ((player2.rating - player1.rating) / 400)));
+  const expected2 = 1 / (1 + (10 ** ((player1.rating - player2.rating) / 400)));
   const didwin1 = (winner.equals(player1._id)) ? 1 : 0;
   const didwin2 = (winner.equals(player2._id)) ? 1 : 0;
   const new1 = player1.rating + player1.kValue * (didwin1 - expected1);
@@ -150,7 +150,7 @@ router.post('/new', async (req, res) => {
         .populate('character2', 'name id _id')
         .then(match => res.status(200).send(match));
     })
-    .catch(err => res.status(400).send('Match not registered'));
+    .catch(() => res.status(400).send('Match not registered'));
 });
 
 module.exports = router;

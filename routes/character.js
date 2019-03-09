@@ -10,7 +10,7 @@ router.get('/all', (req, res) => {
     .sort('id')
     .select('name id _id')
     .then(characters => res.json(characters))
-    .catch(err => res.status(400).send('Could not fetch characters'));
+    .catch(() => res.status(400).send('Could not fetch characters'));
 });
 
 module.exports = router;

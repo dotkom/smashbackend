@@ -1,11 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const passport = require('passport');
 const mongoose = require('mongoose');
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = mongoose.model('User');
 const Match = mongoose.model('Match');
@@ -15,26 +11,17 @@ router.get('/all', (req, res) => {
   User.find({})
     .select('_id nick rating ')
     .then(users => res.json(users))
-    .catch(err => res.status(400).send('Something went wrong'));
+    .catch(() => res.status(400).send('Something went wrong'));
 });
-
-/*
-router.get('/login',
-  passport.authenticate('oidc')
-);
-
-router.get('/logout', function(req,res) {
-  req.logout();
-  res.status(200).send("Logged out")
-  }
-)
-
-router.get('/auth', passport.authenticate('oidc', { successRedirect: '/', failureRedirect: '/' }))
-*/
 router.get('/current', (req, res) => {
   if (req.user) {
     req.user = {
-      rating: req.user.rating, nick: req.user.nick, isAdmin: req.user.isAdmin, _id: req.user._id, name: req.user.name, email: req.user.email,
+      rating: req.user.rating,
+      nick: req.user.nick,
+      isAdmin: req.user.isAdmin,
+      _id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
     };
     return res.json(req.user);
   }
@@ -61,10 +48,15 @@ router.get('/id/:id', (req, res) => {
         .countDocuments({ rating: { $gt: user.rating } });
 
       return res.send({
-        _id: user._id, rank: rank + 1, matches: matchcount, wins: wincount, nick: user.nick, rating: user.rating,
+        _id: user._id,
+        rank: rank + 1,
+        matches: matchcount,
+        wins: wincount,
+        nick: user.nick,
+        rating: user.rating,
       });
     })
-    .catch(err => res.status(400).send('Could not fetch user information'));
+    .catch(() => res.status(400).send('Could not fetch user information'));
 });
 
 router.post('/changenick', (req, res) => {
@@ -84,17 +76,22 @@ router.post('/changenick', (req, res) => {
         return res.status(400).send('User have already taken that nickname');
       }
     });
+
   const updatedUser = req.user;
   updatedUser.nick = nick;
-  updatedUser.save()
+  updatedUser
+    .save()
     .then((user) => {
       req.user = {
-        nick: req.user.nick, isAdmin: req.user.isAdmin, _id: req.user._id, name: req.user.name, email: req.user.email,
+        nick: req.user.nick,
+        isAdmin: req.user.isAdmin,
+        _id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
       };
       return res.json(user);
     })
-    .catch(err => res.status(400).send('Nick not updated. Something went wrong'))
-    .catch(err => res.status(400).send('Something went wrong'));
+    .catch(() => res.status(400).send('Nick not updated. Something went wrong'));
 });
 
 

@@ -5,6 +5,10 @@ const Character = mongoose.model('Character');
 
 exports.fillDatabase = () => {
   characters.forEach((element) => {
-    Character.updateOne({ name: element.name }, { id: element.id, name: element.name }, { upsert: true });
+    Character.updateOne(
+      { name: element.name },
+      { id: element.id, name: element.name },
+      { upsert: true },
+    );
   });
 };
