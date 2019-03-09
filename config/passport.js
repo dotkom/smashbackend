@@ -77,8 +77,9 @@ async function configureOIDCPassport(client) {
 async function setupOIDC() {
   try {
     const client = await getOIDCClient();
-    await configureOIDCPassport(client);
-    return true;
+    client.CLOCK_TOLERANCE = 3;
+    await configureOIDCPassport(client)
+    return true
   } catch (err) {
     return false;
   }
