@@ -11,7 +11,10 @@ const UserSchema = new Schema({
   },
   onlinewebId: String,
   email: String,
-  isAdmin: Boolean,
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   kValue: {
     type: Number,
     default: 100,

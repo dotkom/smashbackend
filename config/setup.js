@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const characters = require('./characters.json');
 
 const Character = mongoose.model('Character');
+const User = mongoose.model('User');
 
 exports.fillDatabase = () => {
   characters.forEach((element) => {
@@ -11,4 +12,8 @@ exports.fillDatabase = () => {
       { upsert: true },
     );
   });
+};
+
+exports.setupAdmin = () => {
+  User.updateOne({ onlinewebId: 'haattis' }, { isAdmin: true }, () => {});
 };
