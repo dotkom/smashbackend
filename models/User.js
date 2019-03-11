@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     type: Number,
     default: 1200,
   },
-  onlinewebId: String,
+  onlineId: String,
   email: String,
   isAdmin: {
     type: Boolean,

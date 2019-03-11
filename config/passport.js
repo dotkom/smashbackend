@@ -16,16 +16,16 @@ async function getOIDCClient() {
 
 async function createUser(userinfo) {
   const {
-    name, nick, onlinewebId, email,
+    name, nick, onlineId, email,
   } = userinfo;
 
   try {
-    const existingUser = await User.findOne({ onlinewebId });
+    const existingUser = await User.findOne({ onlineId });
     if (!existingUser) {
       const newUser = new User({
         name,
         nick,
-        onlinewebId,
+        onlineId,
         email,
       });
       const user = await newUser.save();
@@ -33,7 +33,7 @@ async function createUser(userinfo) {
     }
     const updatedUser = await User.findOne({ _id: existingUser._id });
     return Object.assign(updatedUser, {
-      onlinewebId,
+      onlineId,
       name,
       email,
     }).save();
@@ -46,7 +46,7 @@ function parseOpenIDUserinfo(data) {
   return {
     name: data.name,
     nick: data.preferred_username,
-    onlinewebId: data.preferred_username,
+    onlineId: data.sub,
     email: data.email,
   };
 }
@@ -78,8 +78,8 @@ async function setupOIDC() {
   try {
     const client = await getOIDCClient();
     client.CLOCK_TOLERANCE = 3;
-    await configureOIDCPassport(client)
-    return true
+    await configureOIDCPassport(client);
+    return true;
   } catch (err) {
     return false;
   }

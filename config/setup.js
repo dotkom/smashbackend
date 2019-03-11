@@ -15,5 +15,5 @@ exports.fillDatabase = () => {
 };
 
 exports.setupAdmin = () => {
-  User.updateOne({ onlinewebId: 'haattis' }, { isAdmin: true }, () => {});
+  User.updateOne({ onlineId: '600' }, { isAdmin: true }, () => {});
 };
