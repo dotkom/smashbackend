@@ -129,13 +129,13 @@ router.post('/new', async (req, res) => {
   newMatch.save()
     .then((newmatch) => {
       player1.rating = new1;
-      player1.kValue -= 3;
+      player1.kValue -= 5;
       if (player1.kValue < 25) {
         player1.kValue = 25;
       }
       player1.save();
       player2.rating = new2;
-      player2.kValue -= 3;
+      player2.kValue -= 5;
       if (player2.kValue < 25) {
         player2.kValue = 25;
       }
