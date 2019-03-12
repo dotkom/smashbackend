@@ -2,6 +2,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const { setupOIDC } = require('./passport');
 
+const redirect = process.env.LOGIN_REDIRECT || 'http://localhost:3000';
 const User = mongoose.model('User');
 
 
@@ -20,6 +21,6 @@ module.exports = async (app) => {
     req.logout();
     return res.status(200).send('logged out');
   });
-  app.get('/auth', passport.authenticate('oidc', { successRedirect: 'http://localhost:3000', failureRedirect: 'http://localhost:3000' }));
+  app.get('/auth', passport.authenticate('oidc', { successRedirect: redirect, failureRedirect: redirect }));
   return app;
 };
