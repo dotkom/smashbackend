@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors');
 
 const port = process.env.PORT || 8080;
+const databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/rankingsystemdb';
 const mongoose = require('mongoose');
 require('./models/User');
 require('./models/Character');
@@ -16,7 +17,7 @@ const userstatus = require('./config/userstatus');
 const auth = require('./config/auth');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/rankingsystemdb', { useNewUrlParser: true });
+mongoose.connect(databaseUrl, { useNewUrlParser: true });
 
 
 if (app.get('env') === 'development') {

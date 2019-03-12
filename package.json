@@ -1,22 +1,23 @@
 {
-  "name": "rankingsystem",
+  "name": "smashbackend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "start:prod": "node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/haattis/rankingsystem.git"
+    "url": "git+https://github.com/dotkom/smashbackend.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/haattis/rankingsystem/issues"
+    "url": "https://github.com/dotkom/smashbackend/issues"
   },
-  "homepage": "https://github.com/haattis/rankingsystem#readme",
+  "homepage": "https://github.com/dotkom/smashbackend#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
