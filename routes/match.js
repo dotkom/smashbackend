@@ -68,6 +68,10 @@ router.post('/new', async (req, res) => {
     player1id, character1id, player2id, character2id, winnerid,
   } = req.body;
   const registeredby = req.user;
+
+  if (player1id.length !== 24 || player2id.length !== 24 || winnerid.length !== 24) {
+    return res.status(400).send('Player ids must be 24 characters long. Choose valid character');
+  }
   const winner = new ObjectId(winnerid);
 
   if (!registeredby) {
