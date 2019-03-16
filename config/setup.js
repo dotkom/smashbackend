@@ -7,9 +7,10 @@ const User = mongoose.model('User');
 exports.fillDatabase = () => {
   characters.forEach((element) => {
     Character.updateOne(
-      { name: element.name },
+      { id: element.id },
       { id: element.id, name: element.name },
       { upsert: true },
+      () => {}, // dirty fix
     );
   });
 };
