@@ -63,6 +63,46 @@ router.get('/user/:userid/page/:page', (req, res) => {
     .catch(() => res.status(400).send('Could not fetch matches'));
 });
 
+router.post('/delete', (req, res) => {
+  const { _id } = req.body;
+  const userid = req.user._id;
+
+  Match.findOne({ _id })
+    .then(async (match) => {
+      if (!match) {
+        return res.status(400).send('No match found');
+      }
+      if (!userid.equals(match.registeredBy)
+          && !userid.equals(match.player1)
+          && !userid.equals(match.player2)) {
+        return res.status(400).send('You are not a part of this match');
+      }
+      if (((new Date()) - new Date(match.date)) > (60 * 60 * 1000)) {
+        return res.status(400).send('Too long ago. Contact admin');
+      }
+
+      const user1 = await User.findOne({ _id: match.player1 });
+      const user2 = await User.findOne({ _id: match.player2 });
+
+      const rankchange1 = match.newrank1 - match.oldrank1;
+      const rankchange2 = match.newrank2 - match.oldrank2;
+
+      user1.rating -= rankchange1;
+      user2.rating -= rankchange2;
+
+      user1.save()
+        .catch(() => res.status(400).send('User 1 was not saved, nothing is changed'));
+
+      user2.save()
+        .catch(() => res.status(400).send('User 2 was not saved, user 1 reverted'));
+
+      match.remove()
+        .then(removedmatch => res.status(200).send(removedmatch))
+        .catch(() => res.status(400).send('Nothing changed'));
+    })
+    .catch(() => res.status(400).send('Something went wrong'));
+});
+
 router.post('/new', async (req, res) => {
   const {
     player1id, character1id, player2id, character2id, winnerid,
