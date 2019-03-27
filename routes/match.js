@@ -65,16 +65,19 @@ router.get('/user/:userid/page/:page', (req, res) => {
 
 router.post('/delete', (req, res) => {
   const { _id } = req.body;
+  const userid = req.user._id;
 
   Match.findOne({ _id })
     .then(async (match) => {
       if (!match) {
         return res.status(400).send('No match found');
       }
-      if (match._id !== req.user._id) {
-        return res.status(400).send('You have not registered the match');
+      if (!userid.equals(match.registeredBy)
+          && !userid.equals(match.player1)
+          && !userid.equals(match.player2)) {
+        return res.status(400).send('You are not a part of this match');
       }
-      if (((new Date()) - match.date) < (60 * 60 * 1000)) {
+      if (((new Date()) - new Date(match.date)) > (60 * 60 * 1000)) {
         return res.status(400).send('Too long ago. Contact admin');
       }
 
@@ -96,7 +99,8 @@ router.post('/delete', (req, res) => {
       match.remove()
         .then(removedmatch => res.status(200).send(removedmatch))
         .catch(() => res.status(400).send('Nothing changed'));
-    });
+    })
+    .catch(() => res.status(400).send('Something went wrong'));
 });
 
 router.post('/new', async (req, res) => {
