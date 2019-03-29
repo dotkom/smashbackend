@@ -7,7 +7,7 @@ const User = mongoose.model('User');
 
 router.get('/all', (req, res) => {
   User.find({})
-    .select('nick rating')
+    .select('nick rating _id')
     .sort('-rating')
     .then(users => res.json(users))
     .catch(() => res.status(400).send('Woops, something went wrong'));
@@ -20,8 +20,8 @@ router.get('/top/:page', (req, res) => {
     return res.status(400).send('page must be a positive integer');
   }
   const perpage = 10;
-  User.find({})
-    .select('nick rating')
+  User.find({ kValue: { $lt: 100 } })
+    .select('nick rating _id')
     .sort('-rating')
     .skip((page - 1) * perpage)
     .limit(perpage)
