@@ -45,6 +45,7 @@ router.get('/id/:id', (req, res) => {
         .find({ winner: objectid })
         .countDocuments();
       const rank = await User
+        .find({ kValue: { $lt: 100 } })
         .countDocuments({ rating: { $gt: user.rating } });
 
       return res.send({
