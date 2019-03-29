@@ -72,7 +72,7 @@ router.post('/delete', (req, res) => {
       if (!match) {
         return res.status(400).send('No match found');
       }
-      if (!userid.equals(match.registeredBy)
+      if (!userid.equals(match.registeredby)
           && !userid.equals(match.player1)
           && !userid.equals(match.player2)) {
         return res.status(400).send('You are not a part of this match');
