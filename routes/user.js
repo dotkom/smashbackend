@@ -114,16 +114,16 @@ router.get('/id/:id/stats/character', async (req, res) => {
     }
   });
 
-  const returnlist = [];
+  const list = [];
 
   Object.keys(array).forEach((key) => {
-    returnlist.push({ id: key, count: array[key] });
+    list.push({ id: key, count: array[key] });
   });
 
-  returnlist.sort((a, b) => a.count < b.count);
+  const sortedlist = list.sort((a, b) => a.count < b.count);
 
 
-  return res.status(200).send(returnlist.slice(0, 3));
+  return res.status(200).send(sortedlist.slice(0, 3));
 });
 
 
