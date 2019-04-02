@@ -120,8 +120,10 @@ router.get('/id/:id/stats/character', async (req, res) => {
     returnlist.push({ id: key, count: array[key] });
   });
 
+  returnlist.sort((a, b) => a.count < b.count);
 
-  return res.status(200).send(returnlist);
+
+  return res.status(200).send(returnlist.slice(0, 3));
 });
 
 
