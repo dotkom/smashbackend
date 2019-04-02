@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 const Match = mongoose.model('Match');
-const Character = mongoose.model('Character');
 const { ObjectId } = require('mongoose').Types;
 
 router.get('/all', (req, res) => {
@@ -96,36 +95,27 @@ router.post('/changenick', (req, res) => {
     .catch(() => res.status(400).send('Nick not updated. Something went wrong'));
 });
 
-router.get('/stats/id/:id', async (req, res) => {
+router.get('/id/:id/stats/character', async (req, res) => {
   const { id } = req.params;
 
   const objectid = new ObjectId(id);
 
-  const p1 = await Match
-    .aggregate(
-      [{ $match: { player1: objectid } },
-        { $group: { _id: '$character1', count: { $sum: 1 } } },
-      ],
-    );
+  const matchlist = await Match.find({ $or: [{ player1: objectid }, { player2: objectid }] })
+    .populate('character1', 'name id _id')
+    .populate('character2', 'name id _id');
 
-  const p2 = await Match
-    .aggregate(
-      [{ $match: { player2: objectid } },
-        { $group: { _id: '$character2', count: { $sum: 1 } } },
-      ],
-    );
+  const array = {};
 
-  const result1 = await Character.populate(p1, { path: '_id' });
-  const result2 = await Character.populate(p2, { path: '_id' });
-
-  const array = [];
-
-  result1.forEach((item) => {
-    console.log(item);
+  matchlist.forEach((match) => {
+    if (match.player1.equals(objectid)) {
+      array[match.character1.id] = (array[match.character1.id] || 0) + 1;
+    } else if (match.player2.equals(objectid)) {
+      array[match.character2.id] = (array[match.character2.id] || 0) + 1;
+    }
   });
 
 
-  return res.status(200).send(result2);
+  return res.status(200).send(array);
 });
 
 
