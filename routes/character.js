@@ -26,8 +26,16 @@ router.get('/stats', async (req, res) => {
     array[match.character2.id] = (array[match.character2.id] || 0) + 1;
   });
 
+  const list = [];
 
-  return res.status(200).send(array);
+  Object.keys(array).forEach((key) => {
+    list.push({ id: key, count: array[key] });
+  });
+
+  const sortedlist = list.sort((a, b) => a.count < b.count);
+
+
+  return res.status(200).send(sortedlist.slice(0, 5));
 });
 
 module.exports = router;
