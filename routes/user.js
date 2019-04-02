@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 const Match = mongoose.model('Match');
+const Character = mongoose.model('Character');
 const { ObjectId } = require('mongoose').Types;
 
 router.get('/all', (req, res) => {
@@ -93,6 +94,38 @@ router.post('/changenick', (req, res) => {
       return res.json(user);
     })
     .catch(() => res.status(400).send('Nick not updated. Something went wrong'));
+});
+
+router.get('/stats/id/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const objectid = new ObjectId(id);
+
+  const p1 = await Match
+    .aggregate(
+      [{ $match: { player1: objectid } },
+        { $group: { _id: '$character1', count: { $sum: 1 } } },
+      ],
+    );
+
+  const p2 = await Match
+    .aggregate(
+      [{ $match: { player2: objectid } },
+        { $group: { _id: '$character2', count: { $sum: 1 } } },
+      ],
+    );
+
+  const result1 = await Character.populate(p1, { path: '_id' });
+  const result2 = await Character.populate(p2, { path: '_id' });
+
+  const array = [];
+
+  result1.forEach((item) => {
+    console.log(item);
+  });
+
+
+  return res.status(200).send(result2);
 });
 
 
