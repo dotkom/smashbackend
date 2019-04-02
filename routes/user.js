@@ -114,8 +114,14 @@ router.get('/id/:id/stats/character', async (req, res) => {
     }
   });
 
+  const returnlist = [];
 
-  return res.status(200).send(array);
+  Object.keys(array).forEach((key) => {
+    returnlist.push({ id: key, count: array[key] });
+  });
+
+
+  return res.status(200).send(returnlist);
 });
 
 
