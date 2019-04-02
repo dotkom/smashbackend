@@ -95,5 +95,36 @@ router.post('/changenick', (req, res) => {
     .catch(() => res.status(400).send('Nick not updated. Something went wrong'));
 });
 
+router.get('/id/:id/stats/character', async (req, res) => {
+  const { id } = req.params;
+
+  const objectid = new ObjectId(id);
+
+  const matchlist = await Match.find({ $or: [{ player1: objectid }, { player2: objectid }] })
+    .populate('character1', 'name id _id')
+    .populate('character2', 'name id _id');
+
+  const array = {};
+
+  matchlist.forEach((match) => {
+    if (match.player1.equals(objectid)) {
+      array[match.character1.id] = (array[match.character1.id] || 0) + 1;
+    } else if (match.player2.equals(objectid)) {
+      array[match.character2.id] = (array[match.character2.id] || 0) + 1;
+    }
+  });
+
+  const returnlist = [];
+
+  Object.keys(array).forEach((key) => {
+    returnlist.push({ id: key, count: array[key] });
+  });
+
+  returnlist.sort((a, b) => a.count < b.count);
+
+
+  return res.status(200).send(returnlist.slice(0, 3));
+});
+
 
 module.exports = router;
