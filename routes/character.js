@@ -32,10 +32,19 @@ router.get('/stats', async (req, res) => {
     list.push({ id: key, count: array[key] });
   });
 
-  const sortedlist = list.sort((a, b) => a.count < b.count);
+
+  const sortedlist = list.sort((a, b) => {
+    if (a.count < b.count) {
+      return 1;
+    }
+    if (a.count > b.count) {
+      return -1;
+    }
+    return 0;
+  }).slice(0, 5);
 
 
-  return res.status(200).send(sortedlist.slice(0, 5));
+  return res.status(200).send(sortedlist);
 });
 
 module.exports = router;
