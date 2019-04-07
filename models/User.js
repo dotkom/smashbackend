@@ -19,6 +19,10 @@ const UserSchema = new Schema({
     type: Number,
     default: 100,
   },
+  isBanned: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 mongoose.model('User', UserSchema);

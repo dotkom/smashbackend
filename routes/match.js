@@ -67,6 +67,14 @@ router.post('/delete', (req, res) => {
   const { _id } = req.body;
   const userid = req.user._id;
 
+  if (!req.user) {
+    return res.status(400).send('You must be logged in');
+  }
+
+  if (req.user.isBanned) {
+    return res.status(400).send('You are banned. Contact admin');
+  }
+
   Match.findOne({ _id })
     .then(async (match) => {
       if (!match) {
@@ -116,6 +124,10 @@ router.post('/new', async (req, res) => {
 
   if (!registeredby) {
     return res.status(400).send('You must be logged in to post a match');
+  }
+
+  if (req.user.isBanned) {
+    return res.status(400).send('You are banned. Contact admin');
   }
 
   if (player1id === player2id) {

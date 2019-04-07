@@ -10,9 +10,79 @@ const Match = mongoose.model('Match');
 
 router.get('/users', (req, res) => {
   User.find({})
-    .select('_id name email isAdmin nick')
+    .select('_id name email isAdmin nick isBanned onlineId')
     .then(users => res.json(users))
     .catch(() => res.status(400).send('Something went wrong'));
+});
+
+router.post('/user/ban', (req, res) => {
+  const { _id } = req.body;
+
+  User.findOne({ _id })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send('User does not exist');
+      }
+      const newuser = new User(user);
+      newuser.isBanned = true;
+      newuser.isAdmin = false;
+
+      newuser.save()
+        .then(saveduser => res.status(200).send(saveduser))
+        .catch(() => res.status(400).send('User was not saved. Something went wrong'));
+    });
+});
+
+router.post('/user/unban', (req, res) => {
+  const { _id } = req.body;
+
+  User.findOne({ _id })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send('User does not exist');
+      }
+      const newuser = new User(user);
+      newuser.isBanned = false;
+
+      newuser.save()
+        .then(saveduser => res.status(200).send(saveduser))
+        .catch(() => res.status(400).send('User was not saved. Something went wrong'));
+    });
+});
+
+router.post('/user/makeadmin', (req, res) => {
+  const { _id } = req.body;
+
+  User.findOne({ _id })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send('User does not exist');
+      }
+      const newuser = new User(user);
+      newuser.isAdmin = true;
+      newuser.isBanned = false;
+
+      newuser.save()
+        .then(saveduser => res.status(200).send(saveduser))
+        .catch(() => res.status(400).send('User was not saved. Something went wrong'));
+    });
+});
+
+router.post('/user/removeadmin', (req, res) => {
+  const { _id } = req.body;
+
+  User.findOne({ _id })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send('User does not exist');
+      }
+      const newuser = new User(user);
+      newuser.isAdmin = false;
+
+      newuser.save()
+        .then(saveduser => res.status(200).send(saveduser))
+        .catch(() => res.status(400).send('User was not saved. Something went wrong'));
+    });
 });
 
 router.post('/match/delete', (req, res) => {
