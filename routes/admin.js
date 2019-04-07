@@ -15,8 +15,40 @@ router.get('/users', (req, res) => {
     .catch(() => res.status(400).send('Something went wrong'));
 });
 
+router.post('/user/changenick', async (req, res) => {
+  const { _id, nick } = req.body;
+
+  if (nick.length > 10 || nick.length < 1) {
+    return res.status(400).send('Nick must be between 1 and 10 chars');
+  }
+
+  await User.findOne({ nick })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send('User have already taken that nickname');
+      }
+    });
+
+  await User.findOne({ _id })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send('User does not exist');
+      }
+      const newuser = new User(user);
+      newuser.nick = nick;
+
+      newuser.save()
+        .then(saveduser => res.status(200).send(saveduser))
+        .catch(() => res.status(400).send('User was not saved. Something went wrong'));
+    });
+});
+
 router.post('/user/ban', (req, res) => {
   const { _id } = req.body;
+
+  if (req.user._id.equals(_id)) {
+    return res.status(400).send('You cant ban yourself');
+  }
 
   User.findOne({ _id })
     .then((user) => {
@@ -70,6 +102,10 @@ router.post('/user/makeadmin', (req, res) => {
 
 router.post('/user/removeadmin', (req, res) => {
   const { _id } = req.body;
+
+  if (req.user._id.equals(_id)) {
+    return res.status(400).send('You cant remove admin from yourself');
+  }
 
   User.findOne({ _id })
     .then((user) => {
