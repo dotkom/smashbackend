@@ -16,5 +16,5 @@ exports.fillDatabase = () => {
 };
 
 exports.setupAdmin = () => {
-  User.updateOne({ onlineId: '600' }, { isAdmin: true }, () => {});
+  User.updateOne({ onlineId: '600' }, { isAdmin: true, isBanned: false }, () => {});
 };
