@@ -10,7 +10,7 @@ const Match = mongoose.model('Match');
 
 router.get('/users', (req, res) => {
   User.find({})
-    .select('_id name email isAdmin nick isBanned')
+    .select('_id name email isAdmin nick isBanned onlineId')
     .then(users => res.json(users))
     .catch(() => res.status(400).send('Something went wrong'));
 });
@@ -25,6 +25,7 @@ router.post('/user/ban', (req, res) => {
       }
       const newuser = new User(user);
       newuser.isBanned = true;
+      newuser.isAdmin = false;
 
       newuser.save()
         .then(saveduser => res.status(200).send(saveduser))
@@ -59,6 +60,7 @@ router.post('/user/makeadmin', (req, res) => {
       }
       const newuser = new User(user);
       newuser.isAdmin = true;
+      newuser.isBanned = false;
 
       newuser.save()
         .then(saveduser => res.status(200).send(saveduser))
