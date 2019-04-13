@@ -15,8 +15,14 @@ router.get('/all', (req, res) => {
     .populate('player2', 'nick _id rank')
     .populate('character1', 'name id _id')
     .populate('character2', 'name id _id')
-    .then(matches => res.send(matches))
+    .then(matches => res.status(200).send(matches))
     .catch(() => res.status(400).send('Could not fetch matches'));
+});
+
+router.get('/count', (req, res) => {
+  Match.countDocuments({})
+    .then(count => res.status(200).json(count))
+    .catch(() => res.status(400).send('Could not return match count'));
 });
 
 router.get('/page/:page', (req, res) => {
