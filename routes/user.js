@@ -128,7 +128,7 @@ router.get('/id/:id/stats/character', async (req, res) => {
       return -1;
     }
     return 0;
-  }).slice(0, 3);
+  });
 
 
   return res.status(200).send(sortedlist);

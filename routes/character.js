@@ -41,7 +41,7 @@ router.get('/stats', async (req, res) => {
       return -1;
     }
     return 0;
-  }).slice(0, 5);
+  });
 
 
   return res.status(200).send(sortedlist);
