@@ -22,18 +22,34 @@ router.get('/stats', async (req, res) => {
   const array = {};
 
   matchlist.forEach((match) => {
-    array[match.character1.id] = (array[match.character1.id] || 0) + 1;
-    array[match.character2.id] = (array[match.character2.id] || 0) + 1;
+    if (array[match.character1.id]) {
+      array[match.character1.id].matches += 1;
+    } else {
+      array[match.character1.id] = { matches: 1, wins: 0 };
+    }
+
+    if (array[match.character2.id]) {
+      array[match.character2.id].matches += 1;
+    } else {
+      array[match.character2.id] = { matches: 1, wins: 0 };
+    }
+
+    if (match.winner.equals(match.player1)) {
+      array[match.character1.id].wins += 1;
+    } else {
+      array[match.character2.id].wins += 1;
+    }
   });
+
 
   const list = [];
 
   Object.keys(array).forEach((key) => {
-    list.push({ id: key, count: array[key] });
+    list.push({ id: key, count: array[key].matches, wins: array[key].wins });
   });
 
 
-  const sortedlist = list.sort((a, b) => {
+  /* const sortedlist = list.sort((a, b) => {
     if (a.count < b.count) {
       return 1;
     }
@@ -41,10 +57,10 @@ router.get('/stats', async (req, res) => {
       return -1;
     }
     return 0;
-  });
+  }); */
 
 
-  return res.status(200).send(sortedlist);
+  return res.status(200).send(list);
 });
 
 module.exports = router;
