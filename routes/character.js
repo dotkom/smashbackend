@@ -31,7 +31,7 @@ router.get('/winrates/id/:id', async (req, res) => {
       if (array[match.character1.id]) {
         array[match.character1.id].matches += 1;
       } else {
-        array[match.character1.id] = { matches: 1, wins: 0 };
+        array[match.character1.id] = { name: match.character1.name, matches: 1, wins: 0 };
       }
       if (match.winner.equals(match.player2)) {
         array[match.character1.id].wins += 1;
@@ -40,7 +40,7 @@ router.get('/winrates/id/:id', async (req, res) => {
       if (array[match.character2.id]) {
         array[match.character2.id].matches += 1;
       } else {
-        array[match.character2.id] = { matches: 1, wins: 0 };
+        array[match.character2.id] = { name: match.character2.name, matches: 1, wins: 0 };
       }
 
       if (match.winner.equals(match.player1)) {
@@ -51,7 +51,9 @@ router.get('/winrates/id/:id', async (req, res) => {
   const list = [];
 
   Object.keys(array).forEach((key) => {
-    list.push({ id: key, count: array[key].matches, wins: array[key].wins });
+    list.push({
+      id: key, name: array[key].name, count: array[key].matches, wins: array[key].wins,
+    });
   });
   return res.status(200).send(list);
 });
