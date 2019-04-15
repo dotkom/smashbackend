@@ -108,19 +108,33 @@ router.get('/id/:id/stats/character', async (req, res) => {
 
   matchlist.forEach((match) => {
     if (match.player1.equals(objectid)) {
-      array[match.character1.id] = (array[match.character1.id] || 0) + 1;
+      if (array[match.character1.id]) {
+        array[match.character1.id].matches += 1;
+      } else {
+        array[match.character1.id] = { matches: 1, wins: 0 };
+      }
+      if (match.winner.equals(objectid)) {
+        array[match.character1.id].wins += 1;
+      }
     } else if (match.player2.equals(objectid)) {
-      array[match.character2.id] = (array[match.character2.id] || 0) + 1;
+      if (array[match.character2.id]) {
+        array[match.character2.id].matches += 1;
+      } else {
+        array[match.character2.id] = { matches: 1, wins: 0 };
+      }
+      if (match.winner.equals(objectid)) {
+        array[match.character2.id].wins += 1;
+      }
     }
   });
 
   const list = [];
 
   Object.keys(array).forEach((key) => {
-    list.push({ id: key, count: array[key] });
+    list.push({ id: key, count: array[key].matches, wins: array[key].wins });
   });
 
-  const sortedlist = list.sort((a, b) => {
+  /* const sortedlist = list.sort((a, b) => {
     if (a.count < b.count) {
       return 1;
     }
@@ -128,10 +142,10 @@ router.get('/id/:id/stats/character', async (req, res) => {
       return -1;
     }
     return 0;
-  }).slice(0, 3);
+  }); */
 
 
-  return res.status(200).send(sortedlist);
+  return res.status(200).send(list);
 });
 
 
