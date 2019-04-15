@@ -1,16 +1,20 @@
-pipeline:
+kind: pipeline
+name: default
 
-  deploy:
+steps:
+  - name: deploy
     image: appleboy/drone-ssh
     pull: true
     secrets: [ssh_key]
-    host: nansen.online.ntnu.no
-    port: 22
-    username: root
-    key: ${SSH_KEY}
-    command_timeout: 600s
     when:
       event: push
       branch: master
-    script:
-      - /srv/www/smashrank/deploy.sh
+    settings:
+      host: nansen.online.ntnu.no
+      port: 22
+      username: root
+      key:
+        from_secret: ssh_key
+      command_timeout: 600s
+      script:
+        - /srv/www/smashrank/deploy.sh
