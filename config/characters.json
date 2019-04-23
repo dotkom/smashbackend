@@ -1,305 +1,306 @@
 [
   {
     "name": "Mario",
-    "id": "1",
+    "id": "1"
   },
   {
     "name": "Donkey Kong",
-    "id": "2",
+    "id": "2"
   },
   {
     "name": "Link",
-    "id": "3",
+    "id": "3"
   },
   {
     "name": "Samus",
-    "id": "4",
+    "id": "4"
   },
   {
     "name": "Dark Samus",
-    "id": "5",
+    "id": "5"
   },
   {
     "name": "Yoshi",
-    "id": "6",
+    "id": "6"
   },
   {
     "name": "Kirby",
-    "id": "7",
+    "id": "7"
   },
   {
     "name": "Fox",
-    "id": "8",
+    "id": "8"
   },
   {
     "name": "Pikachu",
-    "id": "9",
+    "id": "9"
   },
   {
     "name": "Luigi",
-    "id": "10",
+    "id": "10"
   },
   {
     "name": "Ness",
-    "id": "11",
+    "id": "11"
   },
   {
     "name": "Captain Falcon",
-    "id": "12",
+    "id": "12"
   },
   {
     "name": "Jigglypuff",
-    "id": "13",
+    "id": "13"
   },
   {
     "name": "Peach",
-    "id": "14",
+    "id": "14"
   },
   {
     "name": "Daisy",
-    "id": "15",
+    "id": "15"
   },
   {
     "name": "Bowser",
-    "id": "16",
+    "id": "16"
   },
   {
     "name": "Ice Climbers",
-    "id": "17",
+    "id": "17"
   },
   {
     "name": "Sheik",
-    "id": "18",
+    "id": "18"
   },
   {
     "name": "Zelda",
-    "id": "19",
+    "id": "19"
   },
   {
     "name": "Dr. Mario",
-    "id": "20",
+    "id": "20"
   },
   {
     "name": "Pichu",
-    "id": "21",
+    "id": "21"
   },
   {
     "name": "Falco",
-    "id": "22",
+    "id": "22"
   },
   {
     "name": "Marth",
-    "id": "23",
+    "id": "23"
   },
   {
     "name": "Lucina",
-    "id": "24",
+    "id": "24"
   },
   {
     "name": "Young Link",
-    "id": "25",
+    "id": "25"
   },
   {
     "name": "Ganondorf",
-    "id": "26",
+    "id": "26"
   },
   {
     "name": "Mewtwo",
-    "id": "27",
+    "id": "27"
   },
   {
     "name": "Roy",
-    "id": "28",
+    "id": "28"
   },
   {
     "name": "Chrom",
-    "id": "29",
+    "id": "29"
   },
   {
     "name": "Mr. Game & Watch",
-    "id": "30",
+    "id": "30"
   },
   {
     "name": "Meta Knight",
-    "id": "31",
+    "id": "31"
   },
   {
     "name": "Pit",
-    "id": "32",
+    "id": "32"
   },
   {
     "name": "Dark Pit",
-    "id": "33",
+    "id": "33"
   },
   {
     "name": "Zero Suit Samus",
-    "id": "34",
+    "id": "34"
   },
   {
     "name": "Wario",
-    "id": "35",
+    "id": "35"
   },
   {
     "name": "Snake",
-    "id": "36",
+    "id": "36"
   },
   {
     "name": "Ike",
-    "id": "37",
+    "id": "37"
   },
   {
     "name": "Pokémon Trainer",
-    "id": "38",
+    "id": "38"
   },
   {
     "name": "Diddy Kong",
-    "id": "39",
+    "id": "39"
   },
   {
     "name": "Lucas",
-    "id": "40",
+    "id": "40"
   },
   {
     "name": "Sonic",
-    "id": "41",
+    "id": "41"
   },
   {
     "name": "King Dedede",
-    "id": "42",
+    "id": "42"
   },
   {
     "name": "Olimar",
-    "id": "43",
+    "id": "43"
   },
   {
     "name": "Lucario",
-    "id": "44",
+    "id": "44"
   },
   {
     "name": "R.O.B.",
-    "id": "45",
+    "id": "45"
   },
   {
     "name": "Toon Link",
-    "id": "46",
+    "id": "46"
   },
   {
     "name": "Wolf",
-    "id": "47",
+    "id": "47"
   },
   {
     "name": "Villager",
-    "id": "48",
+    "id": "48"
   },
   {
     "name": "Mega Man",
-    "id": "49",
+    "id": "49"
   },
   {
     "name": "Wii Fit Trainer",
-    "id": "50",
+    "id": "50"
   },
   {
     "name": "Rosalina & Luma",
-    "id": "51",
+    "id": "51"
   },
   {
     "name": "Little Mac",
-    "id": "52",
+    "id": "52"
   },
   {
     "name": "Greninja",
-    "id": "53",
+    "id": "53"
   },
   {
     "name": "Mii Fighter Brawler",
-    "id": "54",
+    "id": "54"
   },
   {
     "name": "Mii Fighter Swordfighter",
-    "id": "55",
+    "id": "55"
   },
   {
     "name": "Mii Fighter Gunner",
-    "id": "56",
+    "id": "56"
   },
   {
     "name": "Palutena",
-    "id": "57",
+    "id": "57"
   },
   {
     "name": "Pac-Man",
-    "id": "58",
+    "id": "58"
   },
   {
     "name": "Robin",
-    "id": "59",
+    "id": "59"
   },
   {
     "name": "Shulk",
-    "id": "60",
+    "id": "60"
   },
   {
     "name": "Bowser Jr.",
-    "id": "61",
+    "id": "61"
   },
   {
     "name": "Duck Hunt",
-    "id": "62",
+    "id": "62"
   },
   {
     "name": "Ryu",
-    "id": "63",
+    "id": "63"
   },
   {
     "name": "Ken",
-    "id": "64",
+    "id": "64"
   },
   {
     "name": "Cloud",
-    "id": "65",
+    "id": "65"
   },
   {
     "name": "Corrin",
-    "id": "66",
+    "id": "66"
   },
   {
     "name": "Bayonetta",
-    "id": "67",
+    "id": "67"
   },
   {
     "name": "Inkling",
-    "id": "68",
+    "id": "68"
   },
   {
     "name": "Ridley",
-    "id": "69",
+    "id": "69"
   },
   {
     "name": "Simon",
-    "id": "70",
+    "id": "70"
   },
   {
     "name": "Richter",
-    "id": "71",
+    "id": "71"
   },
   {
     "name": "King K. Rool",
-    "id": "72",
+    "id": "72"
   },
   {
     "name": "Isabelle",
-    "id": "73",
+    "id": "73"
   },
   {
     "name": "Incineroar",
-    "id": "74",
+    "id": "74"
   },
   {
     "name": "Piranha Plant",
-    "id": "75",
+    "id": "75"
   },
   {
     "name": "Joker",
-    "id": "76",
+    "id": "76"
+  }
 ]
