@@ -30,7 +30,8 @@
     "nodemon": "^1.19.3",
     "openid-client": "^2.5.0",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "serverless-http": "^2.5.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

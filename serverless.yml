@@ -1,0 +1,30 @@
+service: smashbackend
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+functions:
+  app:
+    handler: serverless.handler
+    environment:
+      HOST_URL: ${ssm:/smashbackend/oauth_host_url}
+      CLIENT_ID:  ${ssm:/smashbackend/client_id}
+      CLIENT_SECRET: ${ssm:/smashbackend/client_secret~true}
+      REDIRECT_URI:  ${ssm:/smashbackend/redirect_uri}
+      LOGIN_REDIRECT:  ${ssm:/smashbackend/login_redirect}
+      SCOPE: openid profile onlineweb4 email
+      COOKIE_SECRET:  ${ssm:/smashbackend/cookie_secret~true}
+      DATABASE_URL: ${ssm:/smashbackend/database_url~true}
+      NODE_ENV: production
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+    vpc:
+      securityGroupIds:
+        - sg-f48f6392
+      subnetIds:
+        - subnet-c260dc9a
+        - subnet-f29cee96
