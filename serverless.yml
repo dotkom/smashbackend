@@ -8,7 +8,7 @@ provider:
 
 functions:
   app:
-    handler: serverless.handler
+    handler: serverless-index.handler
     environment:
       HOST_URL: ${ssm:/smashbackend/oauth_host_url}
       CLIENT_ID:  ${ssm:/smashbackend/client_id}
